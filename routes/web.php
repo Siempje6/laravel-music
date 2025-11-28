@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use App\Http\Controllers\BandController;
+use App\Http\Controllers\AlbumController;
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('bands', BandController::class);
+Route::resource('albums', AlbumController::class);
