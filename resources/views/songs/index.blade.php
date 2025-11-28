@@ -3,9 +3,9 @@
 @section('content')
 <h1>Songs</h1>
 
-<a href="{{ route('songs.create') }}" class="button add">Nieuw Song</a>
+<a href="{{ route('songs.create') }}" class="btn btn-primary btn-small mb-4">Nieuw Song</a>
 
-<table>
+<table class="table">
     <thead>
         <tr>
             <th>Title</th>
@@ -24,13 +24,13 @@
                     {{ $album->name }}@if(!$loop->last), @endif
                 @endforeach
             </td>
-            <td>
-                <a href="{{ route('songs.show', $song->id) }}" class="button info">Bekijk</a>
-                <a href="{{ route('songs.edit', $song->id) }}" class="button edit">Bewerk</a>
+            <td class="actions">
+                <a href="{{ route('songs.show', $song->id) }}" class="btn btn-info btn-small">Bekijk</a>
+                <a href="{{ route('songs.edit', $song->id) }}" class="btn btn-edit btn-small">Bewerk</a>
                 <form action="{{ route('songs.destroy', $song->id) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="delete">Verwijder</button>
+                    <button type="submit" class="btn btn-danger btn-small">Verwijder</button>
                 </form>
             </td>
         </tr>

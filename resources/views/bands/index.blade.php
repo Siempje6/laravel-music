@@ -2,8 +2,10 @@
 
 @section('content')
 <h1>Bands</h1>
-<a href="{{ route('bands.create') }}">+ Voeg band toe</a>
-<table>
+
+<a href="{{ route('bands.create') }}" class="btn btn-primary btn-small mb-4">+ Voeg band toe</a>
+
+<table class="table">
     <thead>
         <tr>
             <th>Naam</th>
@@ -22,13 +24,14 @@
             <td>{{ $band->founded }}</td>
             <td>{{ $band->active_till }}</td>
             <td>
-                <a href="{{ route('bands.show', $band->id) }}">Bekijk albums</a>
+                <a href="{{ route('bands.show', $band->id) }}" class="btn btn-info btn-small">Bekijk albums</a>
             </td>
-            <td>
-                <a href="{{ route('bands.edit', $band->id) }}">Bewerk</a>
-                <form action="{{ route('bands.destroy', $band->id) }}" method="POST">
-                    @csrf @method('DELETE')
-                    <button type="submit">Verwijder</button>
+            <td class="actions">
+                <a href="{{ route('bands.edit', $band->id) }}" class="btn btn-edit btn-small">Bewerk</a>
+                <form action="{{ route('bands.destroy', $band->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-small">Verwijder</button>
                 </form>
             </td>
         </tr>
