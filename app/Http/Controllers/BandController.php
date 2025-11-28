@@ -28,11 +28,13 @@ class BandController extends Controller
         ]);
 
         Band::create($request->all());
+
         return redirect()->route('bands.index')->with('success', 'Band toegevoegd!');
     }
 
     public function show(Band $band)
     {
+        $band->load('albums'); // alle albums laden
         return view('bands.show', compact('band'));
     }
 

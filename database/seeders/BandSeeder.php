@@ -7,10 +7,27 @@ use App\Models\Band;
 
 class BandSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
-        Band::create(['name'=>'The Rolling Stones','genre'=>'Rock','founded'=>1962]);
-        Band::create(['name'=>'Metallica','genre'=>'Metal','founded'=>1981]);
-        Band::create(['name'=>'Coldplay','genre'=>'Pop','founded'=>1996]);
+        Band::create([
+            'name' => 'Metallica',
+            'genre' => 'Heavy Metal',
+            'founded' => 1981,
+            'active_till' => 2025, // Gebruik huidig jaar voor actieve bands
+        ]);
+
+        Band::create([
+            'name' => 'Nirvana',
+            'genre' => 'Grunge',
+            'founded' => 1987,
+            'active_till' => 1994,
+        ]);
+
+        Band::create([
+            'name' => 'Pink Floyd',
+            'genre' => 'Progressive Rock',
+            'founded' => 1965,
+            'active_till' => 1995,
+        ]);
     }
 }

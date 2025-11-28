@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BandController;
+use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\SongController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,12 +16,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-use App\Http\Controllers\BandController;
-use App\Http\Controllers\AlbumController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Models\Band;
+
+Route::get('/', function() {
+    $bands = Band::all();
+    return view('welcome', compact('bands'));
+})->name('welcome');
+
 
 Route::resource('bands', BandController::class);
 Route::resource('albums', AlbumController::class);
+Route::resource('songs', SongController::class);
+Route::get('/search', [App\Http\Controllers\SearchController::class, 'index'])->name('search');
