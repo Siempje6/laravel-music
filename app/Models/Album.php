@@ -1,23 +1,24 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Album extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name','year','times_sold','user_id','band_id'];
 
-    protected $fillable = ['name', 'year', 'times_sold', 'band_id'];
-
-    public function band()
+    public function user()
     {
-        return $this->belongsTo(Band::class);
+        return $this->belongsTo(User::class);
     }
 
     public function songs()
     {
-        return $this->belongsToMany(Song::class, 'album_song');
+        return $this->belongsToMany(Song::class);
+    }
+
+    public function band()
+    {
+        return $this->belongsTo(\App\Models\Band::class);
     }
 }

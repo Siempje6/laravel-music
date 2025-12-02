@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             AlbumSeeder::class,
             SongSeeder::class,
             AlbumSongSeeder::class,
+            AdminSeeder::class,
         ]);
     }
 }
