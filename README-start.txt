@@ -36,3 +36,10 @@ Belangrijk:
 - Laravel vereist minimaal PHP 8.1. Zorg dat je juiste PHP-versie actief is in je PATH.
 - Composer moet geïnstalleerd zijn en in je PATH staan.
 - Na het script kun je de server openen via: http://localhost:8000
+
+
+
+dit is voor inladen content in blade template
+   <main class="py-6">
+        @yield('content')
+    </main>
