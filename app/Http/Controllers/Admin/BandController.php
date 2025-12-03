@@ -10,7 +10,7 @@ class BandController extends Controller
 {
     public function index()
     {
-        $bands = Band::latest()->get();
+        $bands = Band::with('albums')->get();
         return view('admin.bands.index', compact('bands'));
     }
 
@@ -50,6 +50,7 @@ class BandController extends Controller
 
     public function show(Band $band)
     {
+        $band->load('albums.songs'); 
         return view('admin.bands.show', compact('band'));
     }
 
