@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Song;
 use App\Models\Album;
 use App\Models\Band;
-
 use Illuminate\Support\Facades\Http;
 
 class SearchController extends Controller
@@ -19,13 +18,13 @@ class SearchController extends Controller
 
         if ($query) {
             if ($type === 'songs') {
-                $response = Http::get("https://api.deezer.com/search", ['q' => $query]);
+                $response = Http::withoutVerifying()->get("https://api.deezer.com/search", ['q' => $query]);
                 $results = $response->json()['data'] ?? [];
             } elseif ($type === 'albums') {
-                $response = Http::get("https://api.deezer.com/search/album", ['q' => $query]);
+                $response = Http::withoutVerifying()->get("https://api.deezer.com/search/album", ['q' => $query]);
                 $results = $response->json()['data'] ?? [];
             } elseif ($type === 'bands') {
-                $response = Http::get("https://api.deezer.com/search/artist", ['q' => $query]);
+                $response = Http::withoutVerifying()->get("https://api.deezer.com/search/artist", ['q' => $query]);
                 $results = $response->json()['data'] ?? [];
             }
         }
@@ -40,6 +39,7 @@ class SearchController extends Controller
             'singer' => $request->artist,
             'user_id' => auth()->id()
         ]);
+
         return response()->json(['message' => "✅ Song toegevoegd: {$song->title}"]);
     }
 
@@ -49,6 +49,7 @@ class SearchController extends Controller
             'name' => $request->title,
             'year' => $request->year ?? null,
         ]);
+
         return response()->json(['message' => "✅ Album toegevoegd: {$album->name}"]);
     }
 
@@ -56,7 +57,7 @@ class SearchController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'genre' => 'nullable|string|max:255', 
+            'genre' => 'nullable|string|max:255',
         ]);
 
         $band = Band::firstOrCreate(

@@ -11,18 +11,25 @@ class MusicApiService
 
     public function __construct()
     {
-        $this->apiKey = "39ad6431d1b7bd56902f836ac411e0d9";
-        $this->secret = "02551e76d8ae19f981fac990f373767f";
+        $this->apiKey = env('LASTFM_API_KEY');
+        $this->secret = env('LASTFM_SECRET');
     }
 
     public function searchTracks($query)
     {
-        $response = Http::get("http://ws.audioscrobbler.com/2.0/", [
+        $url = "http://ws.audioscrobbler.com/2.0/";
+
+        // SSL verificatie uitgeschakeld voor Windows
+        $response = Http::withoutVerifying()->get($url, [
             'method' => 'track.search',
             'track' => $query,
             'api_key' => $this->apiKey,
             'format' => 'json',
         ]);
+
+        if (!$response->successful()) {
+            return collect(); // fallback bij API issues
+        }
 
         $tracks = $response->json()['results']['trackmatches']['track'] ?? [];
 
