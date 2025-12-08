@@ -81,8 +81,7 @@ Route::post('/admin/songs/add-from-api', [SongController::class, 'storeFromApi']
 
 Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 
-Route::get('/search/songs', [SearchController::class, 'index'])->name('search.songs.index');
+Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 Route::post('/search/songs/add', [SearchController::class, 'addSong'])->name('search.songs.add');
-
 Route::post('/search/albums/add', [SearchController::class, 'addAlbum'])->name('search.albums.add');
-Route::post('/search/songs/add', [SearchController::class, 'addSong'])->name('search.songs.add');
+Route::post('/search/bands/add', [SearchController::class, 'addBand'])->name('search.bands.add');

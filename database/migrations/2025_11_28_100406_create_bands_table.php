@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('bands', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('genre');
             $table->integer('founded');
             $table->string('active_till')->default('Heden');

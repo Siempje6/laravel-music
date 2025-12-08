@@ -13,6 +13,6 @@
     <input type="number" name="founded" value="{{ $band->founded }}" required><br>
     <label>Actief tot:</label><br>
     <input type="text" name="active_till" value="{{ $band->active_till }}"><br><br>
-    <button type="submit">Opslaan</button>
+    <button type="submit" class="btn btn-success">Opslaan</button>
 </form>
 @endsection

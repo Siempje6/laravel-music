@@ -3,12 +3,13 @@
 @section('content')
 <div class="container">
 
-    <h2>🔎 Zoeken</h2>
+    <h2>Zoeken</h2>
 
     {{-- Filter knoppen --}}
     <div class="flex gap-3 mb-4">
         <a href="{{ route('search.index', ['type'=>'songs']) }}" class="btn {{ $type === 'songs' ? 'btn-primary' : 'btn-secondary' }}">Songs</a>
         <a href="{{ route('search.index', ['type'=>'albums']) }}" class="btn {{ $type === 'albums' ? 'btn-primary' : 'btn-secondary' }}">Albums</a>
+        <a href="{{ route('search.index', ['type'=>'bands']) }}" class="btn {{ $type === 'bands' ? 'btn-primary' : 'btn-secondary' }}">Bands</a>
     </div>
 
     {{-- Zoekbalk --}}
@@ -23,20 +24,29 @@
         @foreach($results as $item)
             <div class="search-result flex items-center justify-between p-4 mb-3 border rounded">
                 <div class="flex items-center gap-3">
-                    <img src="{{ $type === 'songs' ? $item['album']['cover_small'] : $item['cover_small'] }}" width="60" class="rounded" />
+                    <img src="{{ $type === 'songs' ? $item['album']['cover_small'] : ($type === 'albums' ? $item['cover_small'] : $item['picture_small']) }}" width="60" class="rounded" />
                     <div>
-                        <strong>{{ $item['title'] }}</strong><br>
-                        <small>{{ $type === 'songs' ? $item['artist']['name'] : '' }}</small>
+                        @if($type === 'songs')
+                            <strong>{{ $item['title'] }}</strong><br>
+                            <small>{{ $item['artist']['name'] }}</small>
+                        @elseif($type === 'albums')
+                            <strong>{{ $item['title'] }}</strong><br>
+                            <small>{{ $item['artist']['name'] }}</small>
+                        @else
+                            <strong>{{ $item['name'] }}</strong>
+                        @endif
                     </div>
                 </div>
 
                 <div class="flex gap-2">
                     @if($type === 'songs')
-                        <button class="btn btn-success" onclick="addSong('{{ $item['title'] }}', '{{ $item['artist']['name'] }}')">➕ Toevoegen</button>
+                        <button class="btn btn-success" onclick="addSong('{{ $item['title'] }}', '{{ $item['artist']['name'] }}')">Toevoegen</button>
+                    @elseif($type === 'albums')
+                        <button class="btn btn-success" onclick="addAlbum('{{ $item['title'] }}')">Toevoegen</button>
                     @else
-                        <button class="btn btn-success" onclick="addAlbum('{{ $item['title'] }}')">➕ Toevoegen</button>
+                        <button class="btn btn-success" onclick="addBand('{{ $item['name'] }}')">Toevoegen</button>
                     @endif
-                    <a href="{{ $item['link'] }}" target="_blank" class="btn btn-info">👁️ Bekijk</a>
+                    <a href="{{ $item['link'] ?? '#' }}" target="_blank" class="btn btn-info">Bekijk</a>
                 </div>
             </div>
         @endforeach
@@ -84,6 +94,24 @@ function addAlbum(title) {
       .then(data => showToast(data.message))
       .catch(() => showToast("❌ Er ging iets mis…"));
 }
+
+function addBand(name, genre = 'Onbekend') {
+    fetch("{{ route('search.bands.add') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({ name, genre })
+    })
+    .then(res => {
+        if (!res.ok) throw new Error('Status ' + res.status);
+        return res.json();
+    })
+    .then(data => showToast(data.message))
+    .catch(err => showToast("❌ Er ging iets mis… " + err.message));
+}
+
 </script>
 
 @endsection
