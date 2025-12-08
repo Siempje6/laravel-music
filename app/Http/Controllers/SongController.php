@@ -30,7 +30,7 @@ class SongController extends Controller
             'singer' => 'required|string|max:255'
         ]);
 
-        $song = Song::create($request->only(['title','singer']));
+        $song = Song::create($request->only(['title', 'singer']));
         $song->albums()->sync($request->albums ?? []);
 
         return redirect()->route('songs.index')->with('success', 'Song toegevoegd!');
@@ -48,7 +48,7 @@ class SongController extends Controller
     {
         $albums = Album::all();
         $song->load('albums');
-        return view('songs.edit', compact('song','albums'));
+        return view('songs.edit', compact('song', 'albums'));
     }
 
     // Update song
@@ -59,7 +59,7 @@ class SongController extends Controller
             'singer' => 'required|string|max:255'
         ]);
 
-        $song->update($request->only(['title','singer']));
+        $song->update($request->only(['title', 'singer']));
         $song->albums()->sync($request->albums ?? []);
 
         return redirect()->route('songs.index')->with('success', 'Song bijgewerkt!');
@@ -72,5 +72,16 @@ class SongController extends Controller
         $song->delete();
 
         return redirect()->route('songs.index')->with('success', 'Song verwijderd!');
+    }
+
+    public function storeFromApi(Request $request)
+    {
+        Song::create([
+            'title' => $request->title,
+            'singer' => $request->artist,
+            'album_id' => null
+        ]);
+
+        return back()->with('success', 'Nummer toegevoegd!');
     }
 }

@@ -11,7 +11,7 @@ class AlbumController extends Controller
 {
     public function index()
     {
-        $albums = Album::latest()->get();
+        $albums = Album::with('songs')->get();
         return view('admin.albums.index', compact('albums'));
     }
 
@@ -68,6 +68,7 @@ class AlbumController extends Controller
         $album->delete();
         return redirect()->route('admin.albums.index')->with('success', 'Album verwijderd!');
     }
+
 
     public function show(Album $album)
     {

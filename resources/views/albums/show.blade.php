@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1>{{ $album->name }}</h1>
-    <p><strong>Band:</strong> {{ $album->band->name }}</p>
+    <p><strong>Band:</strong> {{ $album->band->name ?? 'geen band'}}</p>
     <p><strong>Jaar:</strong> {{ $album->year }}</p>
     <p><strong>Times Sold:</strong> {{ $album->times_sold }}</p>
 

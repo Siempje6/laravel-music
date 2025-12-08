@@ -4,6 +4,7 @@
 <div class="container">
     <h1 class="mb-6">Band Details</h1>
 
+    {{-- BAND CARD --}}
     <div class="card">
         <h2>{{ $band->name }}</h2>
         <p><strong>Genre:</strong> {{ $band->genre }}</p>
@@ -11,46 +12,91 @@
         <p><strong>Active Till:</strong> {{ $band->active_till }}</p>
     </div>
 
+    {{-- ALBUM TABEL EXACT ALS INDEX --}}
     <h2 class="mt-8 mb-4">Albums</h2>
 
-    @forelse($band->albums as $album)
-        <div class="card mb-2">
-            <div class="flex justify-between items-center cursor-pointer album-toggle" data-target="album-{{ $album->id }}">
-                <h3 class="m-0">{{ $album->name }} ({{ $album->year ?? 'Onbekend' }})</h3>
-                <span class="text-xl">▶️</span>
-            </div>
-            <div id="album-{{ $album->id }}" class="hidden mt-2">
-                <ul class="ml-4 list-disc">
-                    @forelse($album->songs as $song)
-                        <li>{{ $song->title }} - {{ $song->singer }}</li>
-                    @empty
-                        <li>Geen nummers in dit album</li>
-                    @endforelse
-                </ul>
-            </div>
-        </div>
-    @empty
-        <p>Geen albums gevonden voor deze band.</p>
-    @endforelse
+    <table class="table album-table">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Jaar</th>
+                <th>Times Sold</th>
+                <th>Eerste Nummer</th>
+                <th>Bekijken</th>
+            </tr>
+        </thead>
 
+        <tbody>
+            @forelse($band->albums as $album)
+            <tr class="album-row" data-target="songs-{{ $album->id }}">
+                <td>{{ $album->name }}</td>
+                <td>{{ $album->year ?? '-' }}</td>
+                <td>{{ $album->times_sold ?? '-' }}</td>
+
+                {{-- SONG PREVIEW SAME AS ALBUM INDEX --}}
+                <td class="song-preview">
+                    @if($album->songs->count() > 0)
+                        {{ $album->songs->first()->title }} – {{ $album->songs->first()->singer }}
+
+                        @if($album->songs->count() > 1)
+                            <span class="more-indicator">(+{{ $album->songs->count() - 1 }} meer)</span>
+                        @endif
+                    @else
+                        Geen nummers
+                    @endif
+                </td>
+                <td class="actions">
+                    <a href="{{ route('admin.albums.show', $album->id) }}" class="btn btn-info btn-small">Bekijken</a>
+                </td>
+            </tr>
+
+            {{-- ACCORDEON ROW EXACT NAMAAKT --}}
+            <tr id="songs-{{ $album->id }}" class="song-accordion">
+                <td colspan="6">
+                    <div class="song-list">
+                        @if($album->songs->count() > 0)
+                        <ul>
+                            @foreach($album->songs as $song)
+                                <li>{{ $song->title }} – {{ $song->singer }}</li>
+                            @endforeach
+                        </ul>
+                        @else
+                            <p>Dit album bevat geen nummers.</p>
+                        @endif
+                    </div>
+                </td>
+            </tr>
+
+            @empty
+            <tr>
+                <td colspan="6">Deze band heeft geen albums.</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    {{-- TERUG / BEWERK --}}
     <div class="mt-4">
         <a href="{{ route('admin.bands.index') }}" class="btn btn-ghost">Terug naar overzicht</a>
         <a href="{{ route('admin.bands.edit', $band->id) }}" class="btn btn-edit">Bewerk</a>
     </div>
 </div>
 
+{{-- ACCORDEON SCRIPT EXACT VAN INDEX --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const toggles = document.querySelectorAll('.album-toggle');
-        toggles.forEach(toggle => {
-            toggle.addEventListener('click', function () {
-                const targetId = this.getAttribute('data-target');
-                const content = document.getElementById(targetId);
-                content.classList.toggle('hidden');
-                const icon = this.querySelector('span');
-                icon.textContent = content.classList.contains('hidden') ? '▶️' : '🔽';
+    document.addEventListener("DOMContentLoaded", () => {
+
+        document.querySelectorAll(".album-row").forEach(row => {
+
+            row.addEventListener("click", () => {
+                const id = row.getAttribute("data-target");
+                const target = document.getElementById(id);
+
+                target.classList.toggle("open");
             });
+
         });
+
     });
 </script>
 @endsection

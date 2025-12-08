@@ -1067,6 +1067,103 @@
             margin: 0;
             opacity: 0.75;
         }
+
+        /* ----- ACCORDEON SONGS ----- */
+        .song-accordion {
+            display: none;
+            background: #f8f8f8;
+        }
+
+        .song-accordion.open {
+            display: table-row;
+        }
+
+        .song-list {
+            padding: 15px 20px;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .song-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .song-preview {
+            cursor: pointer;
+        }
+
+        .album-row {
+            cursor: pointer;
+        }
+
+        .album-row:hover {
+            background: #f2f2f2;
+        }
+
+        .more-indicator {
+            font-size: 0.85rem;
+            color: #777;
+            margin-left: 6px;
+        }
+
+        .search-result {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #6366f1;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .btn-info {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+        .toast {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            padding: 12px 18px;
+            background: #333;
+            color: #fff;
+            border-radius: 8px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-out;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
     </style>
 
 </head>
@@ -1076,8 +1173,8 @@
     <header>
         <div class="nav-wrap">
             <div class="brand">
-                <div class="logo">LM</div>
-                <div class="title">Laravel Music</div>
+                <div onclick="window.location.href=`{{ route('welcome') }}`" class="logo">M</div>
+                <div onclick="window.location.href=`{{ route('welcome') }}`" class="title">Music</div>
             </div>
 
             <nav>
@@ -1101,12 +1198,14 @@
             </nav>
 
             <div class="nav-actions">
-                <input type="search" placeholder="Zoeken..." />
+                <form action="{{ route('search.index') }}" method="GET">
+                    <input type="search" name="q" placeholder="Zoeken..." />
+                </form>
             </div>
+
         </div>
     </header>
 
-    <!-- Role-nav onder header -->
     @auth
     <div class="role-nav">
         @if(auth()->user()->role === 'admin')
